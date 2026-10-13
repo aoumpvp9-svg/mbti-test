@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>꿀잼 2026 나의 숨은 MBTI 찾기 테스트 ✨</title>
+  <meta name="description" content="12개의 일상 속 질문으로 빠르고 정확하게 알아보는 나의 MBTI 성격 유형! 나의 숨겨진 진짜 성향과 찰떡궁합 짝꿍을 찾아보세요.">
+  <meta property="og:title" content="꿀잼 2026 나의 숨은 MBTI 찾기 테스트 ✨">
+  <meta property="og:description" content="12문항으로 알아보는 나의 리얼 성격과 환상의 케미!">
+  <meta property="og:type" content="website">
+
+  <!-- 웹 폰트 (Pretendard & Jua) -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 축하 컨페티 효과 캔버스 -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- 배경 플로팅 장식 요소들 -->
+  <div class="bg-decorations" aria-hidden="true">
+    <div class="floating-bubble bubble-1">💖</div>
+    <div class="floating-bubble bubble-2">✨</div>
+    <div class="floating-bubble bubble-3">🌈</div>
+    <div class="floating-bubble bubble-4">🍭</div>
+    <div class="floating-bubble bubble-5">⭐</div>
+  </div>
+
+  <main class="app-container">
+    <!-- 1. 시작 화면 -->
+    <section id="screen-start" class="screen-view active">
+      <div class="card intro-card">
+        <div class="top-badge">
+          <span class="badge-dot"></span>
+          <span>2026 초간단 성격 테스트</span>
+        </div>
+
+        <div class="intro-visual">
+          <div class="character-circle">
+            <span class="main-emoji">🔮</span>
+            <span class="sub-emoji emoji-tl">⚡</span>
+            <span class="sub-emoji emoji-tr">💖</span>
+            <span class="sub-emoji emoji-bl">🍀</span>
+            <span class="sub-emoji emoji-br">✨</span>
+          </div>
+        </div>
+
+        <h1 class="intro-title">
+          나의 <span class="highlight-text">숨은 성격</span> 찾기<br>
+          초간단 꿀잼 MBTI
+        </h1>
+
+        <p class="intro-desc">
+          일상 속 12가지 상황에서 드러나는 나의 찐 모습!<br>
+          친구들이 보는 나의 숨은 매력과 환상의 짝꿍을 지금 바로 확인해 보세요.
+        </p>
+
+        <div class="meta-info-box">
+          <div class="meta-item">
+            <span class="meta-icon">⏱️</span>
+            <span>소요 시간 <strong>약 2분</strong></span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="meta-icon">📝</span>
+            <span>총 <strong>12문항</strong></span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="meta-icon">🎯</span>
+            <span>정확도 <strong>100% 공감</strong></span>
+          </div>
+        </div>
+
+        <button id="btn-start" class="btn btn-primary btn-bounce" type="button">
+          <span>테스트 시작하기</span>
+          <span class="btn-arrow">👉</span>
+        </button>
+
+        <p class="notice-tip">💡 깊게 고민하지 말고 직관적으로 더 끌리는 쪽을 골라주세요!</p>
+      </div>
+    </section>
+
+    <!-- 2. 질문 화면 -->
+    <section id="screen-question" class="screen-view">
+      <div class="card question-container">
+        <!-- 헤더 및 진행 바 -->
+        <header class="progress-section">
+          <div class="progress-info">
+            <button id="btn-prev" class="btn-text-prev hidden" type="button" title="이전 질문">
+              ← 이전
+            </button>
+            <span class="question-counter">
+              <strong id="current-q-num">1</strong> / <span id="total-q-num">12</span>
+            </span>
+          </div>
+
+          <div class="progress-bar-wrapper">
+            <div id="progress-fill" class="progress-bar-fill"></div>
+            <div id="progress-mascot" class="progress-mascot">🐾</div>
+          </div>
+        </header>
+
+        <!-- 질문 내용 카드 -->
+        <div id="question-card" class="question-content">
+          <div class="q-badge">Question</div>
+          <h2 id="question-title" class="question-text">
+            질문 텍스트가 여기에 표시됩니다.
+          </h2>
+
+          <div class="choices-group">
+            <button id="choice-a" class="btn-choice" type="button">
+              <span id="choice-emoji-a" class="choice-emoji">🎉</span>
+              <span id="choice-text-a" class="choice-text">선택지 A 내용</span>
+            </button>
+
+            <div class="choice-vs" aria-hidden="true">VS</div>
+
+            <button id="choice-b" class="btn-choice" type="button">
+              <span id="choice-emoji-b" class="choice-emoji">🛌</span>
+              <span id="choice-text-b" class="choice-text">선택지 B 내용</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 결과 분석 로딩 화면 -->
+    <section id="screen-loading" class="screen-view">
+      <div class="card loading-card">
+        <div class="loading-spinner-area">
+          <div class="pulse-ring"></div>
+          <div class="spinner-mascot">🔮</div>
+        </div>
+        <h2 class="loading-title">결과를 계산하고 있어요!</h2>
+        <p id="loading-subtext" class="loading-desc">성격 데이터를 분석하고 있어요... 🧩</p>
+      </div>
+    </section>
+
+    <!-- 4. 결과 화면 -->
+    <section id="screen-result" class="screen-view">
+      <div class="card result-card">
+        <div class="result-header">
+          <div class="result-celebrate">🎉 당신의 성격 유형은? 🎉</div>
+          <div id="result-badge-type" class="type-code-badge">ENFP</div>
+          <div id="result-emoji" class="result-main-emoji">✨</div>
+          <h2 id="result-title" class="result-title-text">스파크형 인간 비타민</h2>
+          <p id="result-nickname" class="result-nickname-text">톡톡 튀는 열정 만수르 & 긍정 에너지 전파자</p>
+          <div id="result-tags" class="tag-cloud"></div>
+        </div>
+
+        <!-- 성격 요약 -->
+        <div class="result-section-box">
+          <h3 class="section-subtitle">💡 한 줄 요약</h3>
+          <p id="result-summary" class="summary-text"></p>
+        </div>
+
+        <!-- 핵심 특징 리스트 -->
+        <div class="result-section-box">
+          <h3 class="section-subtitle">🔍 나 이런 사람이야! 핵심 특징</h3>
+          <ul id="result-traits-list" class="traits-list"></ul>
+        </div>
+
+        <!-- 4가지 지표 분석 게이지 -->
+        <div class="result-section-box">
+          <h3 class="section-subtitle">📊 나의 성향 분석 지표</h3>
+          <div class="dimension-bars">
+            <div class="dim-item">
+              <div id="label-ei" class="dim-label"></div>
+              <div class="dim-bar-track">
+                <div id="bar-ei" class="dim-bar-fill bar-ei"></div>
+              </div>
+            </div>
+            <div class="dim-item">
+              <div id="label-sn" class="dim-label"></div>
+              <div class="dim-bar-track">
+                <div id="bar-sn" class="dim-bar-fill bar-sn"></div>
+              </div>
+            </div>
+            <div class="dim-item">
+              <div id="label-tf" class="dim-label"></div>
+              <div class="dim-bar-track">
+                <div id="bar-tf" class="dim-bar-fill bar-tf"></div>
+              </div>
+            </div>
+            <div class="dim-item">
+              <div id="label-jp" class="dim-label"></div>
+              <div class="dim-bar-track">
+                <div id="bar-jp" class="dim-bar-fill bar-jp"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 환상의 케미 & 주의할 케미 -->
+        <div class="result-section-box">
+          <h3 class="section-subtitle">🤝 유형별 케미 궁합</h3>
+          <div class="chemistry-grid">
+            <div id="chem-best" class="chem-card best-card"></div>
+            <div id="chem-worst" class="chem-card worst-card"></div>
+          </div>
+        </div>
+
+        <!-- 하단 액션 버튼 그룹 -->
+        <div class="action-buttons-group">
+          <button id="btn-share" class="btn btn-secondary" type="button">
+            <span>🔗 테스트 결과 공유하기</span>
+          </button>
+          <button id="btn-restart" class="btn btn-primary" type="button">
+            <span>🔄 다시 테스트하기</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 토스트 알림 메시지 -->
+  <div id="toast" class="toast-popup" role="alert" aria-live="polite"></div>
+
+  <!-- 스크립트 연결 -->
+  <script src="js/data.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
